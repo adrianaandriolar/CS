@@ -15,13 +15,13 @@ public class Block2Text
 public	static	void	main(String[] arg)
 {
 		// create a Console for IO
-	Console	con = new Console("Block2Text");
+	//Console	con = new Console("Block2Text");
 	
 		// get file names
-	con.print("Enter base file name: ");
-	String	name = con.readWord();
-	con.println("Input  file is " + name + ".txt");
-	con.println("Output file is " + name + "_t.txt");
+	//con.print("Enter base file name: ");
+	String	name = arg[0];//con.readWord();
+	//con.println("Input  file is " + name + ".txt");
+	//con.println("Output file is " + name + "_t.txt");
 	
 		// open files
 	fin = new FileIn(name + ".txt");
@@ -45,7 +45,7 @@ public	static	void	main(String[] arg)
 	{
 	}
 	fout.close();
-	con.println("-- Finished --");
+	//con.println("-- Finished --");
 }
 
 }

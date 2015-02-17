@@ -15,17 +15,17 @@ public class DecryptAllBlocks
 	public	static	void	main(String[] arg)
 	{
 		// create a Console for IO
-		Console	con = new Console("EncryptAllBlocks");
+		//Console	con = new Console("DecryptAllBlocks");
 		
 			// get file names
-		con.print("Enter input  file name: ");
-		String	name_in = con.readWord();
-		con.print("Enter output file name: ");
-		String	name_out = con.readWord();
+		//con.print("Enter input  file name: ");
+		String	name_in = arg[0];//con.readWord();
+		//con.print("Enter output file name: ");
+		String	name_out = arg[1];//con.readWord();
 		
 			// get key
-		con.print("Enter key as hexadecimal number: ");
-		String	key_string = con.readWord();
+		//con.print("Enter key as hexadecimal number: ");
+		String	key_string = arg[2];//con.readWord();
 		int	key = Hex16.convert(key_string);
 		
 			// open files
@@ -48,7 +48,7 @@ public class DecryptAllBlocks
 		{
 		}
 		fout.close();
-		con.println("-- Finished --");
+		//con.println("-- Finished --");
 	}
 
 }

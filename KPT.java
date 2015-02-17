@@ -25,7 +25,7 @@ public class KPT {
 	}
 	
 	private static String intToHexString(int i){
-		return "0x" + String.format("%04x", (0xFFFF & i));
+		return String.format("0x%04x", i);
 	}
 	
 	private static String decrypt(String hexString, String cipherBlock){
