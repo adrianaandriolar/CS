@@ -17,8 +17,7 @@ public class CTO {
 	public static void main(String[] args) throws IOException {
 		for (int key = 0; key < Math.pow(2, 16); key++){
 			String fileIn = "c2.txt";
-			String fileOut = "c2_decrypted.txt";
-			
+			String fileOut = "c2_decrypted.txt";	
 			String keyHexString = intToHexString(key);
 			if(key%1000 == 0)
 				System.out.println(keyHexString);
@@ -27,44 +26,27 @@ public class CTO {
 			String[] arguments2 = {"c2_decrypted"};
 			//System.out.println(keyHexString);
 			Block2Text.main(arguments2);
-			if (checkDecryptedTextForEnglishChars("c2_decrypted_t.txt"))
+			if (checkDecryptedTextForEnglishChars("c2_decrypted_t.txt")){
 				System.out.println("Potential key decimal - " + key 
 						+ " hex - " + keyHexString);
+				DecryptCipher.decrypt("c2", keyHexString);
+			}
 		}
 	}
 	
 	private static boolean checkDecryptedTextForEnglishChars(String fileName) throws IOException {
-		//Scanner scan = new Scanner(new File(fileName));
 		File f = new File(fileName);
 	    InputStream targetStream = new FileInputStream(f);
 	    int nextByte = targetStream.read();
 		while (nextByte != -1 ){
-			//String line = scan.nextLine();
 			if (!isLatinLetter(nextByte)){
-				//scan.close();
-				//System.out.print(line);
 				targetStream.close();
 				return false;
 			}
 			nextByte = targetStream.read();
-//			if (containsSpecialChars(line)){
-//				scan.close();
-//				System.out.print(line);
-//				return false;
-//			}
 		}
 		targetStream.close();
-		//scan.close();
 		return true;
-	}
-	
-	
-
-	private static boolean containsSpecialChars(String string)
-	{
-		Pattern p = Pattern.compile("[a-zA-Z_0-9 ]*");
-	    Matcher m = p.matcher(string);
-	    return m.find();
 	}
 	
 	public static boolean isLatinLetter(int c) {

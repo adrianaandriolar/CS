@@ -18,9 +18,11 @@ public class KPT {
 	public static void main(String[] args) {
 		for (int key = 0; key < Math.pow(2, 16); key++){
 			cipherTextFirstBlockStringDecrypted = decrypt(intToHexString(key), cipherTextFirstBlock);
-			if (cipherTextFirstBlockStringDecrypted.equals(plainTextFristBlock))
+			if (cipherTextFirstBlockStringDecrypted.equals(plainTextFristBlock)){
 				System.out.println("Potential key decimal - " + key 
 						+ " hex - " + intToHexString(key));
+				DecryptCipher.decrypt("c1", intToHexString(key));
+			}
 		}
 	}
 	
