@@ -1,6 +1,3 @@
-import FormatIO.EofX;
-import FormatIO.FileIn;
-import FormatIO.FileOut;
 
 /**
  * @since 16/02/2015
@@ -11,7 +8,6 @@ public class KPT {
 	
 	private static String plainTextFristBlock = "0x446f";
 	private static String cipherTextFirstBlock = "0xd1b2";
-	private static String plainTextFirstBlockString = "Do";
 	private static String cipherTextFirstBlockStringDecrypted = "";
 
 
