@@ -50,5 +50,13 @@ public class EncryptAllBlocks
 		fout.close();
 		con.println("-- Finished --");
 	}
+	
+	public static String encrypt(String plainTextBlock, String keyString){
+		int	key = Hex16.convert(keyString);
+		int	p = Hex16.convert(plainTextBlock);
+		int	c = Coder.encrypt(key, p);
+		String encryptedBlock = String.format("0x%04x", c);
+		return encryptedBlock;
+	}
 
 }

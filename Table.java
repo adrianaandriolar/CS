@@ -5,11 +5,17 @@
  *
  */
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+
+import FormatIO.FileOut;
 
 public class Table 
 {	
+	public static final String TABLE_TXT = "table.txt";
 	private	Map	tab;
 	
 	public	Table()
@@ -32,5 +38,16 @@ public class Table
 		}
 		else
 			return -1;
+	}
+	
+	public void writeTableToFile(){
+		FileOut f = new FileOut(TABLE_TXT);
+		Set<Integer> keySet = tab.keySet();
+		Iterator<Integer> it = keySet.iterator();
+		while (it.hasNext()){
+			Integer key = it.next();
+			Integer data = (Integer) tab.get(key);
+			f.println(key + " " + data);
+		}			
 	}
 }

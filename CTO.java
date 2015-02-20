@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
-
 /**
  * @since 16/02/2015
  * @author antonbelev
@@ -20,12 +18,23 @@ public class CTO {
 	private static final String WORDS_TXT = "words.txt";
 	public static Set<String> englishWords = new HashSet<String>();
 	public static Map<String, Double> bigramFrequencyTable = new HashMap<String, Double>();
+	private static ArrayList<String> cipherBlocks;
 	public static void main(String[] args) throws FileNotFoundException{
 		setUpEnglishWordsSet();
 		setUpBigramFrequencyTable();
-		ctoCheckForEnglishWords();
+		String actuallKey = ctoCheckForEnglishWords();
+		//findMinimumNumberOfBlocksNeededToDecrypt(actuallKey);
 	}
 	
+	private static void findMinimumNumberOfBlocksNeededToDecrypt(
+			String actuallKey) {
+		
+		for (int i = cipherBlocks.size(); i > 0; i--){
+			
+		}
+		
+	}
+
 	private static void setUpBigramFrequencyTable() throws FileNotFoundException {
 		Scanner s = new Scanner(new File(BIGRAMS_TXT));
 		while (s.hasNextLine()){
@@ -44,10 +53,9 @@ public class CTO {
 		s.close();
 	}
 
-	private static void ctoCheckForEnglishWords() throws FileNotFoundException{
+	private static String ctoCheckForEnglishWords() throws FileNotFoundException{
 		ArrayList<KeyScorePair> keyScores = new ArrayList<KeyScorePair>();
-		String fileIn = C2_TXT;
-		ArrayList<String> cipherBlocks = DecryptAllBlocks.getCipherBlocks(fileIn);
+		cipherBlocks = DecryptAllBlocks.getCipherBlocks(C2_TXT);
 		for (int key = 0; key < Math.pow(2, 16); key++){
 			String keyHexString = intToHexString(key);
 			ArrayList<String> decryptedBlocks = DecryptAllBlocks.decrypt(cipherBlocks, keyHexString);
@@ -67,6 +75,13 @@ public class CTO {
 				System.out.println("Decrypted text:****************\n" + text + "****************\n");
 			}
 		}
+		
+		System.out.println("FINAL RESULTS\n\n\n");
+		System.out.println("The most likely key based on the score is - " + maxScore.hexKeyString + " Score for key: " + maxScore.score);
+		ArrayList<String> dblocks = DecryptAllBlocks.decrypt(cipherBlocks, maxScore.hexKeyString);
+		String text = Block2Text.block2Text(dblocks);
+		System.out.println("Decrypted text:****************\n" + text + "****************\n");
+		return maxScore.hexKeyString;
 		
 	}
 	
