@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -9,20 +10,28 @@ import java.util.Scanner;
  */
 public class TMT1 {
 	
-	private static final String P3_TXT = "p3.txt";
+	public static final String P3_TXT = "p3.txt";
+	public static int N = (int) Math.pow(2, 8);
+	public static int L = (int) Math.pow(2, 8);
 
 	public static void setUpTable() throws FileNotFoundException{
 		Table t = new Table();
-		String plainTextBlock = getFirstPlainTextBlock();
-		for (int key = 0; key < Math.pow(2, 16); key++){
-			String keyHexString = intToHexString(key);
-			String cipherBlock = EncryptAllBlocks.encrypt(plainTextBlock, keyHexString);
-			t.add(Hex16.convert(cipherBlock), Hex16.convert(keyHexString));
+		int plainTextBlock = Hex16.convert(getFirstPlainTextBlock());
+		Random rn = new Random();
+		for (int i = 0; i < N; i++){
+			int x0 = rn.nextInt((int) Math.pow(2, 16));
+			int x1 = Coder.encrypt(x0, plainTextBlock);
+			int x2 = Coder.encrypt(x1, plainTextBlock);
+			for(int j = 0; j < L; j++){
+				x2 = Coder.encrypt(x1, plainTextBlock);
+				x1 = Coder.encrypt(x2, plainTextBlock);
+			}
+			t.add(x2, x0);
 		}
 		t.writeTableToFile();
 	}
 	
-	private static String getFirstPlainTextBlock() throws FileNotFoundException {
+	public static String getFirstPlainTextBlock() throws FileNotFoundException {
 		Scanner s = new Scanner(new File(P3_TXT));
 		String block = "";
 		while (s.hasNextLine()){
