@@ -26,26 +26,27 @@ public class CTO {
 		setUpEnglishWordsSet();
 		setUpBigramFrequencyTable();
 		cipherBlocks = DecryptAllBlocks.getCipherBlocks(C2_TXT);
-		String actualKey = ctoCheckForEnglishWords(cipherBlocks);
+		String actualKey = ctoCheckForEnglishWords(cipherBlocks, false);
 		findMinimumNumberOfBlocksNeededToDecrypt(actualKey);
 	}
 	
 	private static void findMinimumNumberOfBlocksNeededToDecrypt(
 			String actualKey) throws FileNotFoundException {
-		System.out.println("Start of experiment");
-		for (int blocksUsed = 1; blocksUsed < cipherBlocks.size(); blocksUsed++){
+		String experimentOutput = "Start of experiment\n";
+		for (int blocksUsed = 1; blocksUsed <= cipherBlocks.size(); blocksUsed++){
 			int countCorret = 0;
-			for(int last = blocksUsed; last < cipherBlocks.size() - blocksUsed; last += blocksUsed){
+			for(int last = blocksUsed; last <= cipherBlocks.size(); last += 1){
 				ArrayList<String> sublist = new ArrayList<String>();
 				sublist = new ArrayList<String>(cipherBlocks.subList(last - blocksUsed, last));
-				String newKey = ctoCheckForEnglishWords(sublist);
+				String newKey = ctoCheckForEnglishWords(sublist, true);
 				if (newKey.equals(actualKey))
 					countCorret += 1;
 			}
-			System.out.println("Ciphertext blocks used: " + blocksUsed + ". Total correct keys found " 
-								+ countCorret + "/" + cipherBlocks.size() / blocksUsed);
+			experimentOutput += "Ciphertext blocks used: " + blocksUsed + ". In total " 
+								+ countCorret + "/" + (cipherBlocks.size() - blocksUsed + 1) + 
+								" attacks have found the correct key.\n";
 		}
-		
+		System.out.println(experimentOutput);
 	}
 
 	private static void setUpBigramFrequencyTable() throws FileNotFoundException {
@@ -66,7 +67,7 @@ public class CTO {
 		s.close();
 	}
 
-	private static String ctoCheckForEnglishWords(ArrayList<String> cipherBlocks) throws FileNotFoundException{
+	private static String ctoCheckForEnglishWords(ArrayList<String> cipherBlocks, boolean experiment) throws FileNotFoundException{
 		ArrayList<KeyScorePair> keyScores = new ArrayList<KeyScorePair>();
 		
 		for (int key = 0; key < Math.pow(2, 16); key++){
@@ -88,11 +89,13 @@ public class CTO {
 			}
 		}
 		
-		//System.out.println("FINAL RESULTS\n\n\n");
-		System.out.println("The most likely key based on the score is - " + maxScore.hexKeyString + " Score for key: " + maxScore.score);
-		ArrayList<String> dblocks = DecryptAllBlocks.decrypt(cipherBlocks, maxScore.hexKeyString);
-		String text = Block2Text.block2Text(dblocks);
-		//System.out.println("Decrypted text:\n" + text + "\n");
+		if (!experiment){
+			System.out.println("FINAL RESULTS");
+			System.out.println("The most likely key based on the score is - " + maxScore.hexKeyString + " Score for key: " + maxScore.score);
+			ArrayList<String> dblocks = DecryptAllBlocks.decrypt(cipherBlocks, maxScore.hexKeyString);
+			String text = Block2Text.block2Text(dblocks);
+			System.out.println("Decrypted text:\n" + text + "\n");
+		}
 		return maxScore.hexKeyString;
 		
 	}
