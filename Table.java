@@ -5,7 +5,6 @@
  *
  */
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -16,13 +15,16 @@ import FormatIO.FileOut;
 public class Table 
 {	
 	public static final String TABLE_TXT = "table.txt";
+	@SuppressWarnings("rawtypes")
 	private	Map	tab;
 	
+	@SuppressWarnings("rawtypes")
 	public	Table()
 	{
 		tab = new HashMap();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public	void	add(int key, int data)
 	{
 		tab.put(new Integer(key), new Integer(data));
@@ -40,6 +42,7 @@ public class Table
 			return -1;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void writeTableToFile(){
 		FileOut f = new FileOut(TABLE_TXT);
 		Set<Integer> keySet = tab.keySet();

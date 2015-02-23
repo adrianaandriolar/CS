@@ -19,7 +19,8 @@ public class TMT2 {
 		key = -1;
 		ArrayList<String> cipherBlocks = DecryptAllBlocks.getCipherBlocks(C3_TXT);
 		plainTextBlock = Hex16.convert(TMT1.getFirstPlainTextBlock());
-		cipherBlock = Hex16.convert(cipherBlocks.get(0));		
+		cipherBlock = Hex16.convert(cipherBlocks.get(0));
+		
 		
 		if (t.find(cipherBlock) != -1){
 			key = tableHasKey(cipherBlock);

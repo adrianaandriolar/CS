@@ -1,15 +1,17 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
 /**
- * @since 16/02/2015
- * @author antonbelev
+ * 
+ * @author Anton Belev 1103816b
  * Cipher Text Only Attack
  */
 public class CTO {
@@ -18,19 +20,30 @@ public class CTO {
 	private static final String WORDS_TXT = "words.txt";
 	public static Set<String> englishWords = new HashSet<String>();
 	public static Map<String, Double> bigramFrequencyTable = new HashMap<String, Double>();
-	private static ArrayList<String> cipherBlocks;
+	private static ArrayList<String> cipherBlocks = new ArrayList<String>();
+	
 	public static void main(String[] args) throws FileNotFoundException{
 		setUpEnglishWordsSet();
 		setUpBigramFrequencyTable();
-		String actuallKey = ctoCheckForEnglishWords();
-		//findMinimumNumberOfBlocksNeededToDecrypt(actuallKey);
+		cipherBlocks = DecryptAllBlocks.getCipherBlocks(C2_TXT);
+		String actualKey = ctoCheckForEnglishWords(cipherBlocks);
+		findMinimumNumberOfBlocksNeededToDecrypt(actualKey);
 	}
 	
 	private static void findMinimumNumberOfBlocksNeededToDecrypt(
-			String actuallKey) {
-		
-		for (int i = cipherBlocks.size(); i > 0; i--){
-			
+			String actualKey) throws FileNotFoundException {
+		System.out.println("Start of experiment");
+		for (int blocksUsed = 1; blocksUsed < cipherBlocks.size(); blocksUsed++){
+			int countCorret = 0;
+			for(int last = blocksUsed; last < cipherBlocks.size() - blocksUsed; last += blocksUsed){
+				ArrayList<String> sublist = new ArrayList<String>();
+				sublist = new ArrayList<String>(cipherBlocks.subList(last - blocksUsed, last));
+				String newKey = ctoCheckForEnglishWords(sublist);
+				if (newKey.equals(actualKey))
+					countCorret += 1;
+			}
+			System.out.println("Ciphertext blocks used: " + blocksUsed + ". Total correct keys found " 
+								+ countCorret + "/" + cipherBlocks.size() / blocksUsed);
 		}
 		
 	}
@@ -53,9 +66,9 @@ public class CTO {
 		s.close();
 	}
 
-	private static String ctoCheckForEnglishWords() throws FileNotFoundException{
+	private static String ctoCheckForEnglishWords(ArrayList<String> cipherBlocks) throws FileNotFoundException{
 		ArrayList<KeyScorePair> keyScores = new ArrayList<KeyScorePair>();
-		cipherBlocks = DecryptAllBlocks.getCipherBlocks(C2_TXT);
+		
 		for (int key = 0; key < Math.pow(2, 16); key++){
 			String keyHexString = intToHexString(key);
 			ArrayList<String> decryptedBlocks = DecryptAllBlocks.decrypt(cipherBlocks, keyHexString);
@@ -67,20 +80,19 @@ public class CTO {
 		KeyScorePair maxScore = new KeyScorePair("-1", Double.MIN_VALUE);
 		for (KeyScorePair kc : keyScores){
 			if (kc.score > maxScore.score){
-				//System.out.println("new score " + kc.score + " key " + kc.hexKeyString);
 				maxScore = kc;
-				System.out.println("Potential key decimal - " + maxScore.hexKeyString + " Score for key: " + maxScore.score);
+				//System.out.println("Potential key decimal - " + maxScore.hexKeyString + " Score for key: " + maxScore.score);
 				ArrayList<String> dblocks = DecryptAllBlocks.decrypt(cipherBlocks, maxScore.hexKeyString);
 				String text = Block2Text.block2Text(dblocks);
-				System.out.println("Decrypted text:****************\n" + text + "****************\n");
+				//System.out.println("Decrypted text:****************\n" + text + "****************\n");
 			}
 		}
 		
-		System.out.println("FINAL RESULTS\n\n\n");
+		//System.out.println("FINAL RESULTS\n\n\n");
 		System.out.println("The most likely key based on the score is - " + maxScore.hexKeyString + " Score for key: " + maxScore.score);
 		ArrayList<String> dblocks = DecryptAllBlocks.decrypt(cipherBlocks, maxScore.hexKeyString);
 		String text = Block2Text.block2Text(dblocks);
-		System.out.println("Decrypted text:****************\n" + text + "****************\n");
+		//System.out.println("Decrypted text:\n" + text + "\n");
 		return maxScore.hexKeyString;
 		
 	}

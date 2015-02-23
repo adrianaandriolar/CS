@@ -1,10 +1,12 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 /**
- * @since 16/02/2015
- * @author antonbelev
+ * 
+ * @author Anton Belev 1103816b
  * Known plain text attack - brute force algorithm
  */
 public class KPT {
@@ -40,6 +42,17 @@ public class KPT {
 		int	p = Coder.decrypt(key, c);
 		String	out = String.format("0x%04x", p);
 		return out;
+	}
+	
+	public static ArrayList<String> getCipherBlocks(String fileIn)
+			throws FileNotFoundException {
+		ArrayList<String> cipherBlocks = new ArrayList<String>();
+		Scanner s = new Scanner(new File(fileIn));
+		while (s.hasNextLine()) {
+			cipherBlocks.add(s.nextLine());
+		}
+		s.close();
+		return cipherBlocks;
 	}
 
 }

@@ -5,14 +5,14 @@ import java.util.Scanner;
 
 /**
  * 
- * @author 1103816b
+ * @author Anton Belev 1103816b
  * TMT1 is used to populate the Time Memory Tradeoff table
  */
 public class TMT1 {
 	
 	public static final String P3_TXT = "p3.txt";
-	public static int N = (int) Math.pow(2, 8);
-	public static int L = (int) Math.pow(2, 8);
+	public static int N = (int) Math.pow(2, 8); // Since L * N should be equal to 2^16 (number of keys).
+	public static int L = (int) Math.pow(2, 8); // Assume L = N = 2^8
 
 	public static void setUpTable() throws FileNotFoundException{
 		Table t = new Table();
