@@ -10,7 +10,11 @@ import FormatIO.EofX;
 import FormatIO.FileIn;
 import FormatIO.FileOut;
 
-
+/**
+ * 
+ * @author Anton Belev 1103816b 
+ * General methods used widely in other classes
+ */
 public abstract class Utils {
 	public static final String TABLE_TXT = "table.txt";
 	public static final String P3_TXT = "p3.txt";

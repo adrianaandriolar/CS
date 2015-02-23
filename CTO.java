@@ -30,7 +30,8 @@ public class CTO {
 	
 	private static void findMinimumNumberOfBlocksNeededToDecrypt(
 			String actualKey) throws FileNotFoundException {
-		String experimentOutput = "Start of experiment\n";
+		System.out.println("Start of experiment...");
+		String experimentOutput = "Results...\n";
 		for (int blocksUsed = 1; blocksUsed <= cipherBlocks.size(); blocksUsed++){
 			int countCorret = 0;
 			for(int last = blocksUsed; last <= cipherBlocks.size(); last += 1){
@@ -69,7 +70,7 @@ public class CTO {
 		ArrayList<KeyScorePair> keyScores = new ArrayList<KeyScorePair>();
 		
 		for (int key = 0; key < Math.pow(2, 16); key++){
-			String keyHexString = intToHexString(key);
+			String keyHexString = Utils.intToHexString(key);
 			ArrayList<String> decryptedBlocks = Utils.decrypt(cipherBlocks, keyHexString);
 			String text = Utils.block2Text(decryptedBlocks);
 			int validEnglishScore = scoreValidEnglishWords(text);
@@ -115,10 +116,6 @@ public class CTO {
 				score += bigramFrequencyTable.get(bigram);
 		}
 		return score;
-	}
-
-	private static String intToHexString(int i){
-		return String.format("0x%04x", i);
 	}
 	
 	private static class KeyScorePair{

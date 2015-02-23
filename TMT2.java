@@ -48,6 +48,8 @@ public class TMT2 {
 		else{
 			ArrayList<String> dblocks = Utils.decrypt(cipherBlocks, Utils.intToHexString(key));
 			String text = Utils.block2Text(dblocks);
+			System.out.println("Key found. " + key 
+					+ " Hex value - " + Utils.intToHexString(key));
 			System.out.println("Decrypted text:\n" + text);
 		}
 	}

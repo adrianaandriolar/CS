@@ -18,20 +18,16 @@ public class KPT {
 	public static void main(String[] args) throws FileNotFoundException {
 		ArrayList<String> cipherBlocks = Utils.getCipherBlocks(C1_TXT);
 		for (int key = 0; key < Math.pow(2, 16); key++){
-			cipherTextFirstBlockStringDecrypted = decrypt(intToHexString(key), cipherTextFirstBlock);
+			cipherTextFirstBlockStringDecrypted = decrypt(Utils.intToHexString(key), cipherTextFirstBlock);
 			if (cipherTextFirstBlockStringDecrypted.equals(plainTextFristBlock)){
 				System.out.println("Key found. Decimal value - " + key 
-						+ " Hex value - " + intToHexString(key));
-				ArrayList<String> dblocks = Utils.decrypt(cipherBlocks, intToHexString(key));
+						+ " Hex value - " + Utils.intToHexString(key));
+				ArrayList<String> dblocks = Utils.decrypt(cipherBlocks, Utils.intToHexString(key));
 				String text = Utils.block2Text(dblocks);
 				System.out.println("Decrypted text:\n" + text);
 				break;
 			}
 		}
-	}
-	
-	private static String intToHexString(int i){
-		return String.format("0x%04x", i);
 	}
 	
 	private static String decrypt(String hexString, String cipherBlock){
