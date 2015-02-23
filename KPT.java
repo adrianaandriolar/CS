@@ -1,7 +1,5 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 /**
@@ -18,14 +16,14 @@ public class KPT {
 
 
 	public static void main(String[] args) throws FileNotFoundException {
-		ArrayList<String> cipherBlocks = DecryptAllBlocks.getCipherBlocks(C1_TXT);
+		ArrayList<String> cipherBlocks = Utils.getCipherBlocks(C1_TXT);
 		for (int key = 0; key < Math.pow(2, 16); key++){
 			cipherTextFirstBlockStringDecrypted = decrypt(intToHexString(key), cipherTextFirstBlock);
 			if (cipherTextFirstBlockStringDecrypted.equals(plainTextFristBlock)){
 				System.out.println("Key found. Decimal value - " + key 
 						+ " Hex value - " + intToHexString(key));
-				ArrayList<String> dblocks = DecryptAllBlocks.decrypt(cipherBlocks, intToHexString(key));
-				String text = Block2Text.block2Text(dblocks);
+				ArrayList<String> dblocks = Utils.decrypt(cipherBlocks, intToHexString(key));
+				String text = Utils.block2Text(dblocks);
 				System.out.println("Decrypted text:\n" + text);
 				break;
 			}
@@ -43,16 +41,4 @@ public class KPT {
 		String	out = String.format("0x%04x", p);
 		return out;
 	}
-	
-	public static ArrayList<String> getCipherBlocks(String fileIn)
-			throws FileNotFoundException {
-		ArrayList<String> cipherBlocks = new ArrayList<String>();
-		Scanner s = new Scanner(new File(fileIn));
-		while (s.hasNextLine()) {
-			cipherBlocks.add(s.nextLine());
-		}
-		s.close();
-		return cipherBlocks;
-	}
-
 }

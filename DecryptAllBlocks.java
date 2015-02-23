@@ -4,11 +4,6 @@
  * (c) Ron Poet
  */
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 import FormatIO.EofX;
 import FormatIO.FileIn;
 import FormatIO.FileOut;
@@ -47,46 +42,4 @@ public class DecryptAllBlocks {
 		fout.close();
 		// con.println("-- Finished --");
 	}
-
-	public static ArrayList<String> decrypt(String keyString, String fileIn) {
-		ArrayList<String> decryptedBlocks = new ArrayList<String>();
-		FileIn fin = new FileIn(fileIn);
-		int key = Hex16.convert(keyString);
-		try {
-			for (;;) {
-				String s = fin.readWord();
-				int c = Hex16.convert(s);
-				int p = Coder.decrypt(key, c);
-				String out = String.format("0x%04x", p);
-				decryptedBlocks.add(out);
-			}
-		} catch (EofX x) {
-		}
-		return decryptedBlocks;
-	}
-
-	public static ArrayList<String> decrypt(ArrayList<String> cipherBlocks,
-			String keyString) {
-		ArrayList<String> decryptedBlocks = new ArrayList<String>();
-		int key = Hex16.convert(keyString);
-		for (String cipherBlock : cipherBlocks) {
-			int c = Hex16.convert(cipherBlock);
-			int p = Coder.decrypt(key, c);
-			String out = String.format("0x%04x", p);
-			decryptedBlocks.add(out);
-		}
-		return decryptedBlocks;
-	}
-
-	public static ArrayList<String> getCipherBlocks(String fileIn)
-			throws FileNotFoundException {
-		ArrayList<String> cipherBlocks = new ArrayList<String>();
-		Scanner s = new Scanner(new File(fileIn));
-		while (s.hasNextLine()) {
-			cipherBlocks.add(s.nextLine());
-		}
-		s.close();
-		return cipherBlocks;
-	}
-
 }

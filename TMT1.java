@@ -1,7 +1,7 @@
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * 
@@ -10,13 +10,13 @@ import java.util.Scanner;
  */
 public class TMT1 {
 	
-	public static final String P3_TXT = "p3.txt";
-	public static int N = (int) Math.pow(2, 8); // Since L * N should be equal to 2^16 (number of keys).
-	public static int L = (int) Math.pow(2, 8); // Assume L = N = 2^8
+	
+	private static int N = (int) Math.pow(2, 8); // Since L * N should be equal to 2^16 (number of keys).
+	private static int L = (int) Math.pow(2, 8); // Assume L = N = 2^8
+	private static Map<Integer, Integer> myTable = new HashMap<Integer, Integer>();
 
-	public static void setUpTable() throws FileNotFoundException{
-		Table t = new Table();
-		int plainTextBlock = Hex16.convert(getFirstPlainTextBlock());
+	private static void setUpTable() throws FileNotFoundException{
+		int plainTextBlock = Hex16.convert(Utils.getFirstPlainTextBlock(Utils.P3_TXT));
 		Random rn = new Random();
 		for (int i = 0; i < N; i++){
 			int x0 = rn.nextInt((int) Math.pow(2, 16));
@@ -26,39 +26,13 @@ public class TMT1 {
 				x2 = Coder.encrypt(x1, plainTextBlock);
 				x1 = Coder.encrypt(x2, plainTextBlock);
 			}
-			t.add(x2, x0);
+			myTable.put(x2, x0);
 		}
-		t.writeTableToFile();
-	}
-	
-	public static String getFirstPlainTextBlock() throws FileNotFoundException {
-		Scanner s = new Scanner(new File(P3_TXT));
-		String block = "";
-		while (s.hasNextLine()){
-			block = s.nextLine();
-			break;
-		}
-		s.close();
-		return block;
-	}
-	
-	public static String intToHexString(int i){
-		return String.format("0x%04x", i);
-	}
-
-	public static Table loadTable() throws FileNotFoundException {
-		Scanner s = new Scanner(new File(Table.TABLE_TXT));
-		Table t = new Table();
-		while (s.hasNextLine()){
-			String[] line = s.nextLine().split(" ");
-			t.add(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
-		}
-		s.close();
-		return t;
+		Utils.writeTableToFile(myTable);
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		TMT1.setUpTable();
-		System.out.println("Table file created successfully. File name - " + Table.TABLE_TXT);
+		System.out.println("Table file created successfully. File name - " + Utils.TABLE_TXT);
 	}
 }

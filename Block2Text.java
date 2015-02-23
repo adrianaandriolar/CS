@@ -5,8 +5,6 @@
  *  (c) Ron Poet
  */
 
-import java.util.ArrayList;
-
 import FormatIO.EofX;
 import FormatIO.FileIn;
 import FormatIO.FileOut;
@@ -52,20 +50,7 @@ public class Block2Text
 		//con.println("-- Finished --");
 	}
 	
-	public static String block2Text(ArrayList<String> blocks){
-		String text = "";
-		for (String block : blocks)
-		{
-			int	i = Hex16.convert(block);
-			int	c0 = i / 256;
-			int	c1 = i % 256;
-			text += (char)c0;
-			if (c1 != 0)
-			text +=(char)c1;
-
-		}
-		return text;
-	}
+	
 
 }
 
